@@ -532,41 +532,94 @@ EC2203 | Royal Holloway | 2020/21
 </h3>
 </section>
 </section>
-<section><section id="test-scores-and-student-teacher-ratios" class="title-slide slide level1"><h1>Test scores and student-teacher ratios</h1></section><section id="test-scores-and-student-teacher-ratios-1" class="slide level2">
-<h2>Test scores and student-teacher ratios</h2>
-<p><img src="index_files/figure-revealjs/unnamed-chunk-2-1.png" width="70%" /></p>
-</section><section id="predictions-and-prediction-errors" class="slide level2">
-<h2>Predictions and prediction errors</h2>
+<section><section id="a-simple-linear-regression-model-of-test-scores-and-student-teacher-ratios" class="title-slide slide level1"><h1>A simple linear regression model of test scores and student-teacher ratios</h1></section><section id="the-population-regression-function" class="slide level2">
+<h2>The population regression function</h2>
 <ul>
-<li><p>Predict test scores from the student-teacher ratio using</p>
-<p><span class="math display">\[\mathrm{E}(Score|STR) = \beta_0 + \beta_1 STR\]</span></p></li>
-<li><p>Predictions involve errors; that is,</p>
-<p><span class="math display">\[Score = \beta_0 + \beta_1 STR + error\]</span></p>
-<p>where</p>
-<p><span class="math display">\[error \equiv Score - \mathrm{E}(Score|STR)\]</span></p></li>
+<li><p>Suppose the relationship between <span class="math inline">\(Score\)</span> and <span class="math inline">\(STR\)</span> that holds, on average, in the population is a linear function</p>
+<div class="box">
+<p><span class="math display">\[\mathrm{E}(Score|STR) = \beta_0 + \beta_1 STR\]</span></p>
+</div></li>
+<li><p><span class="math inline">\(\mathrm{E}(Score|STR)\)</span> is the <strong>population regression function</strong></p>
+<ul>
+<li><p><span class="math inline">\(\beta_0\)</span> is the <strong>intercept</strong></p></li>
+<li><p><span class="math inline">\(\beta_1\)</span> is the <strong>slope parameter</strong></p></li>
+</ul></li>
 </ul>
-</section><section id="predictions" class="slide level2">
-<h2>Predictions</h2>
-<p><span class="math display">\[\mathrm{E}(Score|STR) = 713 - 3 STR\]</span></p>
-<p><img src="index_files/figure-revealjs/unnamed-chunk-3-1.png" width="70%" /></p>
-</section><section id="adding-a-line-to-a-plot-in-r" class="slide level2">
-<h2>Adding a line to a plot in R</h2>
-<p><span class="math display">\[\mathrm{E}(Score|STR) = 713 - 3 STR\]</span></p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># Scatter plot of Score against STR</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">plot</span>(CASchools<span class="op">$</span>STR,CASchools<span class="op">$</span>Score, </span>
-<span id="cb1-3"><a href="#cb1-3"></a>     <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="co"># Color of data points</span></span>
-<span id="cb1-4"><a href="#cb1-4"></a>     <span class="dt">xlab =</span> <span class="st">&quot;Student-teacher ratio&quot;</span>,  <span class="co"># Label on x-axis</span></span>
-<span id="cb1-5"><a href="#cb1-5"></a>     <span class="dt">ylab =</span> <span class="st">&quot;Test score&quot;</span>,   <span class="co"># Label on y-axis</span></span>
-<span id="cb1-6"><a href="#cb1-6"></a>     <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">10</span>, <span class="dv">30</span>),  <span class="co"># Range of x-axis (from 10 to 30)</span></span>
-<span id="cb1-7"><a href="#cb1-7"></a>     <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">600</span>, <span class="dv">720</span>)) <span class="co"># Range of y-axis (from 600 to 720)</span></span>
-<span id="cb1-8"><a href="#cb1-8"></a><span class="co"># Add line with intercept 713 and slope -3 to the plot </span></span>
-<span id="cb1-9"><a href="#cb1-9"></a><span class="kw">abline</span>(<span class="dv">713</span>,<span class="op">-</span><span class="dv">3</span>,</span>
-<span id="cb1-10"><a href="#cb1-10"></a>       <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>, <span class="co"># Make the line red</span></span>
-<span id="cb1-11"><a href="#cb1-11"></a>       <span class="dt">lwd =</span> <span class="dv">3</span>) <span class="co"># Set linewidth to 3</span></span></code></pre></div>
+<!-- - The population regression function captures the relationship between $Score$ and $STR$ that holds, on average, in the population -->
+</section><section id="the-population-regression-function-1" class="slide level2">
+<h2>The population regression function</h2>
+<p><span class="math display">\[\mathrm{E}(Score|STR) = 695 - 2 STR\]</span> <img data-src="index_files/figure-revealjs/unnamed-chunk-2-1.png" /><!-- --></p>
+</section><section id="creating-and-plotting-a-function-in-r" class="slide level2">
+<h2>Creating and plotting a function in R</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># Define population regression function (of x) as f(x) = 695 - 2*x</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a>popregfct &lt;-<span class="st"> </span><span class="cf">function</span>(x){<span class="dv">695-2</span><span class="op">*</span>x} </span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="co"># Plot a curve of popregfct </span></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="kw">curve</span>(popregfct, </span>
+<span id="cb1-5"><a href="#cb1-5"></a>      <span class="dt">from =</span> <span class="dv">5</span>, <span class="dt">to =</span> <span class="dv">35</span>, <span class="co"># Evaluate in x values from 5 to 35</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a>      <span class="dt">xlab =</span> <span class="st">&quot;Student-teacher ratio&quot;</span>, <span class="co"># Label on x-axis</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a>      <span class="dt">ylab =</span> <span class="st">&quot;Test score&quot;</span>, <span class="co"># Label on y-axis</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a>      <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">10</span>, <span class="dv">30</span>),  <span class="co"># Range of x-axis (from 10 to 30)</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a>      <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">600</span>, <span class="dv">720</span>), <span class="co"># Range of y-axis (from 600 to 720)</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a>      <span class="dt">lwd =</span> <span class="dv">3</span>, <span class="co"># Set linewidth to 3</span></span>
+<span id="cb1-11"><a href="#cb1-11"></a>      <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>) <span class="co"># Make the plotted line blue</span></span></code></pre></div>
 </section><section id="errors" class="slide level2">
 <h2>Errors</h2>
-<p><span class="math display">\[error = Score - (713 - 3 STR)\]</span></p>
-<p><img src="index_files/figure-revealjs/unnamed-chunk-5-1.png" width="70%" /></p>
+<ul>
+<li><p>Predictions using <span class="math inline">\(\mathrm{E}(Score|STR)\)</span> involve errors:</p>
+<div class="box">
+<p><span class="math display">\[u = Score - \mathrm{E}(Score|STR)\]</span></p>
+</div></li>
+<li><p>The error <span class="math inline">\(u\)</span> contains all the determinants of <span class="math inline">\(Score\)</span> that are not <span class="math inline">\(STR\)</span> (what might those be?)</p></li>
+</ul>
+</section><section id="errors-1" class="slide level2">
+<h2>Errors</h2>
+<p><img data-src="index_files/figure-revealjs/unnamed-chunk-4-1.png" /><!-- --></p>
+</section><section id="plot-points-and-arrows-in-r" class="slide level2">
+<h2>Plot points and arrows in R</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># Plot a curve of popregfct </span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="kw">curve</span>(popregfct, </span>
+<span id="cb2-3"><a href="#cb2-3"></a>      <span class="dt">from =</span> <span class="dv">5</span>, <span class="dt">to =</span> <span class="dv">35</span>, <span class="co"># Evaluate in x values from 5 to 35</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a>      <span class="dt">xlab =</span> <span class="st">&quot;Student-teacher ratio&quot;</span>, <span class="co"># Label on x-axis</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a>      <span class="dt">ylab =</span> <span class="st">&quot;Test score&quot;</span>, <span class="co"># Label on y-axis</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a>      <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">10</span>, <span class="dv">30</span>),  <span class="co"># Range of x-axis (from 10 to 30)</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a>      <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">600</span>, <span class="dv">720</span>), <span class="co"># Range of y-axis (from 600 to 720)</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a>      <span class="dt">lwd =</span> <span class="dv">3</span>, <span class="co"># Set linewidth to 3</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a>      <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>) <span class="co"># Make the plotted line blue</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="co"># Connect points (15.25,popregfct(15.25)) and (15.25,635.45) by an arrow</span></span>
+<span id="cb2-11"><a href="#cb2-11"></a><span class="kw">arrows</span>(<span class="dt">x0 =</span> <span class="fl">15.25</span>, <span class="dt">y0 =</span> <span class="kw">popregfct</span>(<span class="fl">15.25</span>), <span class="dt">x1 =</span> <span class="fl">15.25</span>, <span class="dt">y1 =</span> <span class="fl">635.45</span>, </span>
+<span id="cb2-12"><a href="#cb2-12"></a>       <span class="dt">code =</span> <span class="dv">3</span>, <span class="co"># Arrow head in both ends</span></span>
+<span id="cb2-13"><a href="#cb2-13"></a>       <span class="dt">lwd =</span> <span class="dv">3</span>, <span class="co"># Set linewidth to 3</span></span>
+<span id="cb2-14"><a href="#cb2-14"></a>       <span class="dt">col =</span> <span class="st">&quot;lightblue&quot;</span>) <span class="co"># Make arrow lightblue</span></span>
+<span id="cb2-15"><a href="#cb2-15"></a><span class="kw">points</span>(<span class="fl">15.25</span>,<span class="fl">635.45</span>, <span class="co"># Plot data-point (15,635.45)</span></span>
+<span id="cb2-16"><a href="#cb2-16"></a>       <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>) <span class="co"># Plot data-point in blue</span></span></code></pre></div>
+<!-- ## Errors -->
+<!-- ```{r echo=FALSE, error=FALSE, warning=FALSE, out.width = "70%"} -->
+<!-- # Scatter plot of Score against STR -->
+<!-- plot(CASchools$STR,CASchools$Score,  -->
+<!--      col = "blue", # Color of data points -->
+<!--      xlab = "Student-teacher ratio",  # Label on x-axis -->
+<!--      ylab = "Test score",   # Label on y-axis -->
+<!--      xlim = c(10, 30),  # Range of x-axis (from 10 to 30) -->
+<!--      ylim = c(600, 720)) # Range of y-axis (from 600 to 720) -->
+<!-- # Add line with intercept 713 and slope -3 to the plot  -->
+<!-- abline(mean(CASchools$Score)+3*mean(CASchools$STR),-3, -->
+<!--        col = "red", # Make the line red -->
+<!--        lwd = 3) # Set linewidth to 3 -->
+<!-- points(24,676.85, # Re-plot data-point (24,676.85) -->
+<!--        col = "blue", # Re-plot data-point in blue -->
+<!--        lwd = 5) # ... but make line thicker -->
+<!-- # Connect points (24,641) and (24,676.85) by a line -->
+<!-- lines(x = c(24,24),y = c(641,676.85),  -->
+<!--        col = "green", # Make the line green -->
+<!--        lwd = 3) # Set linewidth to 3 -->
+<!-- points(15,635.45, # Re-plot data-point (15,635.45) -->
+<!--        col = "blue", # Re-plot data-point in blue -->
+<!--        lwd = 5) # ... but make line thicker -->
+<!-- # Connect points (15,668) and (15,635.45) by a line -->
+<!-- lines(x = c(15,15),y = c(668,635.45), -->
+<!--        col = "green", # Make the line green -->
+<!--        lwd = 3) # Set linewidth to 3 -->
+<!-- ``` -->
 <!-- ## Highlighting and connecting points in an R plot -->
 <!-- $$error = Score - (713 - 3 STR)$$ -->
 <!-- ```{r echo=TRUE, eval = FALSE, error=FALSE, warning=FALSE, out.width = "70%"} -->
@@ -596,14 +649,17 @@ EC2203 | Royal Holloway | 2020/21
 <!--        col = "green", # Make the line green -->
 <!--        lwd = 3) # Set linewidth to 3 -->
 <!-- ``` -->
-</section><section id="best-line" class="slide level2">
-<h2>“Best” line?</h2>
-<p><span class="math display">\[\mathrm{E}(Score|STR) = 713 - 3 STR\]</span></p>
-<p><img src="index_files/figure-revealjs/unnamed-chunk-6-1.png" width="70%" /></p>
-</section><section id="best-line-1" class="slide level2">
-<h2>“Best” line?</h2>
-<p><span class="math display">\[\mathrm{E}(Score|STR) = 595 + 3 STR\]</span></p>
-<p><img src="index_files/figure-revealjs/unnamed-chunk-7-1.png" width="70%" /></p>
+</section><section id="a-simple-linear-regression-model" class="slide level2">
+<h2>A simple linear regression model</h2>
+<div class="box">
+<p><span class="math display">\[Score = \underset{\mathrm{E}(Score|STR)}{\underbrace{\beta_0 + \beta_1 STR}} + u\]</span></p>
+</div>
+<ul>
+<li><p><span class="math inline">\(Score\)</span> is the <strong>dependent variable</strong></p></li>
+<li><p><span class="math inline">\(STR\)</span> is the <strong>regressor</strong></p></li>
+<li><p><span class="math inline">\(u\)</span> is the <strong>error term</strong></p></li>
+<li><p>Problem: <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> are <strong>unknown</strong></p></li>
+</ul>
 <!-- ## "Best" line? -->
 <!-- $$\mathrm{E}(Score|STR) = 654$$ -->
 <!-- ```{r echo=FALSE, error=FALSE, warning=FALSE, out.width = "70%"} -->
@@ -627,76 +683,143 @@ EC2203 | Royal Holloway | 2020/21
 <!--        col = "orange", # Make the line green -->
 <!--        lwd = 3) # Set linewidth to 3 -->
 <!-- ``` -->
-</section></section>
-<section><section id="the-simple-linear-regression-model" class="title-slide slide level1"><h1>The simple linear regression model</h1></section><section id="the-simple-linear-regression-model-1" class="slide level2">
-<h2>The simple linear regression model</h2>
-<ul>
-<li><p>Let <span class="math inline">\(Y\)</span> be the random variable we want to model as a function of another random variable <span class="math inline">\(X\)</span>; suppose</p>
-<p><span class="math display">\[\mathrm{E}(Y|X) = \beta_0 + \beta_1 X\]</span></p></li>
-<li><p>Let <span class="math inline">\(u \equiv Y - \mathrm{E}(Y|X)\)</span> be the error made when predicting <span class="math inline">\(Y\)</span> by its conditional mean</p>
-<div class="box">
-<p><span class="math display">\[Y = \beta_0 + \beta_1 X + u\]</span></p>
-</div></li>
-<li><p><span class="math inline">\(u\)</span> contains <strong>everything</strong> that determines <span class="math inline">\(Y\)</span> that is <strong>not</strong> <span class="math inline">\(X\)</span></p></li>
-</ul>
-</section><section id="linear-regression-terminology" class="slide level2">
-<h2>Linear regression terminology</h2>
-<div class="box">
-<p><span class="math display">\[Y = \beta_0 + \beta_1 X + u\]</span></p>
-</div>
-<ul>
-<li><p><span class="math inline">\(Y\)</span> is the <strong>dependent variable</strong>; <span class="math inline">\(X\)</span> is the <strong>regressor</strong>; <span class="math inline">\(u\)</span> is the <strong>error term</strong></p></li>
-<li><p><span class="math inline">\(\mathrm{E}(Y|X) = \beta_0 + \beta_1 X\)</span> is the <strong>population regression function</strong>, involving <strong>population parameters</strong> <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span></p>
-<ul>
-<li><p><span class="math inline">\(\beta_0\)</span> is the <strong>intercept</strong></p></li>
-<li><p><span class="math inline">\(\beta_1\)</span> is the <strong>slope parameter</strong></p></li>
-</ul></li>
-<li><p>The population parameters <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> are <strong>unknown</strong></p></li>
-</ul>
+<!-- # The simple linear regression model -->
+<!-- ## The simple linear regression model -->
+<!-- - Let $Y$ be the random variable we want to model as a function of another random variable $X$; suppose -->
+<!--   $$\mathrm{E}(Y|X) = \beta_0 + \beta_1 X$$ -->
+<!-- - Let $u \equiv Y - \mathrm{E}(Y|X)$ be the error made when predicting $Y$ by its conditional mean -->
+<!--   <div class="box"> -->
+<!--   $$Y = \beta_0 + \beta_1 X + u$$ -->
+<!--   </div> -->
+<!-- - $u$ contains **everything** that determines $Y$ that is **not** $X$ -->
+<!-- ## Linear regression terminology -->
+<!-- <div class="box"> -->
+<!-- $$Y = \beta_0 + \beta_1 X + u$$ -->
+<!-- </div> -->
+<!-- - $Y$ is the **dependent variable**; $X$ is the **regressor**; $u$ is the **error term** -->
+<!-- - $\mathrm{E}(Y|X) = \beta_0 + \beta_1 X$ is the **population regression function**, involving **population parameters** $\beta_0$ and $\beta_1$ -->
+<!--   - $\beta_0$ is the **intercept** -->
+<!--   - $\beta_1$ is the **slope parameter** -->
+<!-- - The population parameters $\beta_0$ and $\beta_1$ are **unknown** -->
 </section></section>
 <section><section id="the-ordinary-least-squares-ols-estimator" class="title-slide slide level1"><h1>The Ordinary Least Squares (OLS) estimator</h1></section><section id="the-estimation-problem" class="slide level2">
 <h2>The estimation problem</h2>
 <ul>
 <li><p>Estimation: learn about <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> from <strong>random sample</strong> of data from the population; data is</p>
-<p><span class="math display">\[(Y_i,X_i; i=1,...,n)\]</span></p></li>
+<div class="box">
+<p><span class="math display">\[(Score_i,STR_i; i=1,...,n)\]</span></p>
+</div></li>
 <li><p>Each data point follows the population regression</p>
 <div class="box">
-<p><span class="math display">\[Y_i = \beta_0 + \beta_1 X_i + u_i\]</span></p>
+<p><span class="math display">\[Score_i = \beta_0 + \beta_1 STR_i + u_i\]</span></p>
 </div></li>
 </ul>
-</section><section id="ols-terminology" class="slide level2">
-<h2>OLS terminology</h2>
+</section><section id="test-scores-and-student-teacher-ratio-data" class="slide level2">
+<h2>Test scores and student-teacher ratio data</h2>
+<p><img data-src="index_files/figure-revealjs/unnamed-chunk-6-1.png" /><!-- --></p>
+</section><section id="adding-a-line-to-a-plot-in-r" class="slide level2">
+<h2>Adding a line to a plot in R</h2>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># Scatter plot of Score against STR</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="kw">plot</span>(CASchools<span class="op">$</span>STR,CASchools<span class="op">$</span>Score, </span>
+<span id="cb3-3"><a href="#cb3-3"></a>     <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="co"># Color of data points</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a>     <span class="dt">xlab =</span> <span class="st">&quot;Student-teacher ratio&quot;</span>,  <span class="co"># Label on x-axis</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a>     <span class="dt">ylab =</span> <span class="st">&quot;Test score&quot;</span>,   <span class="co"># Label on y-axis</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a>     <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">10</span>, <span class="dv">30</span>),  <span class="co"># Range of x-axis (from 10 to 30)</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a>     <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">600</span>, <span class="dv">720</span>)) <span class="co"># Range of y-axis (from 600 to 720)</span></span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="co"># Add line with intercept 695 and slope -2 to the plot </span></span>
+<span id="cb3-9"><a href="#cb3-9"></a><span class="kw">abline</span>(<span class="dv">695</span>,<span class="op">-</span><span class="dv">2</span>, </span>
+<span id="cb3-10"><a href="#cb3-10"></a>       <span class="dt">col =</span> <span class="st">&quot;gray&quot;</span>, <span class="co"># Make the line gray</span></span>
+<span id="cb3-11"><a href="#cb3-11"></a>       <span class="dt">lwd =</span> <span class="dv">3</span>) <span class="co"># Set linewidth to 3</span></span></code></pre></div>
+</section><section id="sample-regression-function" class="slide level2">
+<h2>Sample regression function</h2>
 <ul>
 <li><p>We refer to the <strong>OLS estimators</strong> of <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> as <span class="math inline">\(\hat{\beta}_0\)</span> and <span class="math inline">\(\hat{\beta}_1\)</span></p>
-<p>An estimator is a rule that tells you how to compute estimates from a sample</p></li>
-<li><p>The function <span class="math inline">\(\hat{\beta}_0 + \hat{\beta}_1 X\)</span> is the <strong>sample regression function</strong>, involving OLS estimators <span class="math inline">\(\hat{\beta}_0\)</span> and <span class="math inline">\(\hat{\beta}_1\)</span></p></li>
-<li><p><span class="math inline">\(\hat{Y}_i = \hat{\beta}_0 + \hat{\beta}_1 X_i\)</span> is the <strong>fitted value</strong> of <span class="math inline">\(Y_i\)</span> given <span class="math inline">\(X_i\)</span></p>
-<p>The fitted value <span class="math inline">\(\hat{Y}_i\)</span> is the sample counterpart of <span class="math inline">\(\mathrm{E}(Y_i|X_i)\)</span></p></li>
-<li><p><span class="math inline">\(\hat{u}_i = Y_i - \hat{Y}_i\)</span> is the <strong>residual</strong> for the <span class="math inline">\(i\)</span>th observation</p>
-<p>The residual <span class="math inline">\(\hat{u}_i\)</span> is the sample counterpart of the error <span class="math inline">\(u_i\)</span></p></li>
+<p>An estimator is a rule that tells you how to compute estimates from a sample: estimates are known quantities.</p></li>
+<li><p>The <strong>sample regression function</strong> obtains by replacing <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> by <span class="math inline">\(\hat{\beta}_0\)</span> and <span class="math inline">\(\hat{\beta}_1\)</span> in the population regression function</p>
+<div class="box">
+<p><span class="math display">\[\hat{\beta}_0 + \hat{\beta}_1 STR\]</span></p>
+</div></li>
 </ul>
+</section><section id="best-line-through-the-data" class="slide level2">
+<h2>“Best” line through the data?</h2>
+<p>Sample regression function <span class="math inline">\(= 713 - 3 STR\)</span> <img data-src="index_files/figure-revealjs/unnamed-chunk-8-1.png" /><!-- --></p>
+</section><section id="best-line-through-the-data-1" class="slide level2">
+<h2>“Best” line through the data?</h2>
+<p>Sample regression function <span class="math inline">\(= 595 + 3 STR\)</span> <img data-src="index_files/figure-revealjs/unnamed-chunk-9-1.png" /><!-- --></p>
+</section><section id="fitted-values" class="slide level2">
+<h2>Fitted values</h2>
+<div class="box">
+<p><span class="math display">\[\hat{Score}_i = \hat{\beta}_0 + \hat{\beta}_1 STR_i; \quad i=1,\ldots,n\]</span></p>
+</div>
+<ul>
+<li><span class="math inline">\(\hat{Score}_i\)</span> is the sample counterpart to <span class="math inline">\(\mathrm{E}(Score_i|STR_i)\)</span></li>
+</ul>
+</section><section id="fitted-values-1" class="slide level2">
+<h2>Fitted values</h2>
+<p><span class="math display">\[\hat{Score}_i = 713 - 3 STR_i\]</span> <img data-src="index_files/figure-revealjs/unnamed-chunk-10-1.png" /><!-- --></p>
+<!-- ## Predictions -->
+<!-- $$\mathrm{E}(Score|STR) = 713 - 3 STR$$ -->
+<!-- ```{r echo=FALSE, error=FALSE, warning=FALSE, out.width = "70%"} -->
+<!-- # Scatter plot of Score against STR -->
+<!-- plot(CASchools$STR,CASchools$Score,  -->
+<!--      col = "blue", # Color of data points -->
+<!--      xlab = "Student-teacher ratio",  # Label on x-axis -->
+<!--      ylab = "Test score",   # Label on y-axis -->
+<!--      xlim = c(10, 30),  # Range of x-axis (from 10 to 30) -->
+<!--      ylim = c(600, 720)) # Range of y-axis (from 600 to 720) -->
+<!-- abline(mean(CASchools$Score)+3*mean(CASchools$STR),-3, -->
+<!--        col = "red", -->
+<!--        lwd = 3) -->
+<!-- ``` -->
+<!-- ## Adding a line to a plot in R -->
+<!-- $$\mathrm{E}(Score|STR) = 713 - 3 STR$$ -->
+<!-- ```{r echo=TRUE, eval=FALSE, error=FALSE, warning=FALSE, out.width = "70%"} -->
+<!-- # Scatter plot of Score against STR -->
+<!-- plot(CASchools$STR,CASchools$Score,  -->
+<!--      col = "blue", # Color of data points -->
+<!--      xlab = "Student-teacher ratio",  # Label on x-axis -->
+<!--      ylab = "Test score",   # Label on y-axis -->
+<!--      xlim = c(10, 30),  # Range of x-axis (from 10 to 30) -->
+<!--      ylim = c(600, 720)) # Range of y-axis (from 600 to 720) -->
+<!-- # Add line with intercept 713 and slope -3 to the plot  -->
+<!-- abline(713,-3, -->
+<!--        col = "red", # Make the line red -->
+<!--        lwd = 3) # Set linewidth to 3 -->
+<!-- ``` -->
+</section><section id="residuals" class="slide level2">
+<h2>Residuals</h2>
+<div class="box">
+<p><span class="math display">\[\hat{u}_i = Y_i - \hat{Y}_i; \quad i=1,\ldots,n\]</span></p>
+</div>
+<ul>
+<li><span class="math inline">\(\hat{u}_i\)</span> is the sample counterpart to the error <span class="math inline">\(u_i\)</span></li>
+</ul>
+</section><section id="residuals-1" class="slide level2">
+<h2>Residuals</h2>
+<p><span class="math display">\[\hat{u}_i = Score_i - (713 - 3 STR_i)\]</span> <img data-src="index_files/figure-revealjs/unnamed-chunk-11-1.png" /><!-- --></p>
 </section><section id="the-ols-estimator" class="slide level2">
 <h2>The OLS estimator</h2>
 <ul>
 <li><p>The OLS estimator finds regression coefficients that puts the fitted regression line as <strong>close to</strong> the data as possible;</p></li>
-<li><p>The distance between the regression line is measured by the <strong>sum of squared residuals</strong>;</p>
-<p>that is, <strong>OLS estimators</strong> <span class="math inline">\(\hat{\beta}_0\)</span> and <span class="math inline">\(\hat{\beta}_1\)</span> solve</p>
+<li><p>The distance between the regression line and the data is measured by the <strong>sum of squared residuals</strong>;</p></li>
+<li><p>Formally, the <strong>OLS estimators</strong> <span class="math inline">\(\hat{\beta}_0\)</span> and <span class="math inline">\(\hat{\beta}_1\)</span> solve</p>
 <div class="box">
-<p><span class="math display">\[\min_{\hat{\beta}_0,\hat{\beta}_1} \sum_{i=1}^n \hat{u}_i^2 = \min_{\hat{\beta}_0,\hat{\beta}_1} \sum_{i=1}^n \big(Y_i - \hat{\beta}_0 - \hat{\beta}_1 X_i \big)^2\]</span></p>
+<p><span class="math display">\[\min_{\hat{\beta}_0,\hat{\beta}_1} \sum_{i=1}^n \hat{u}_i^2\]</span></p>
 </div></li>
 </ul>
 </section><section id="ols-estimators-of-beta_0-and-beta_0" class="slide level2">
 <h2>OLS estimators of <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_0\)</span></h2>
+<br>
 <div class="centerbox">
-<p><span class="math display">\[\hat{\beta}_1 = \frac{\sum_{i=1}^n (X_i-\overline{X})(Y_i-\overline{Y})}{\sum_{i=1}^n (X_i-\overline{X})^2}\]</span> <br> <span class="math display">\[\hat{\beta}_0 = \overline{Y} - \hat{\beta}_1 \overline{X}\]</span></p>
+<p><span class="math display">\[\hat{\beta}_1 = \frac{\sum_{i=1}^n (STR_i-\overline{STR})(Score_i-\overline{Score})}{\sum_{i=1}^n (STR_i-\overline{STR})^2}\]</span> <br> <span class="math display">\[\hat{\beta}_0 = \overline{Score} - \hat{\beta}_1 \overline{STR}\]</span></p>
 </div>
 </section></section>
 <section><section id="implementing-the-ols-estimator-in-r" class="title-slide slide level1"><h1>Implementing the OLS estimator in R</h1></section><section id="ols-estimates" class="slide level2">
 <h2>OLS estimates</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># Estimate b0,b1 in Score = b0 + b1 STR + u by OLS; </span></span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="co"># then assign output to lm1</span></span>
-<span id="cb2-3"><a href="#cb2-3"></a>lm1 &lt;-<span class="st"> </span><span class="kw">lm</span>(Score <span class="op">~</span><span class="st"> </span>STR, <span class="dt">data =</span> CASchools) </span>
-<span id="cb2-4"><a href="#cb2-4"></a>lm1 <span class="co"># Print output to console</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Estimate b0,b1 in Score = b0 + b1 STR + u by OLS; </span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="co"># then assign output to lm1</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a>lm1 &lt;-<span class="st"> </span><span class="kw">lm</span>(Score <span class="op">~</span><span class="st"> </span>STR, <span class="dt">data =</span> CASchools) </span>
+<span id="cb4-4"><a href="#cb4-4"></a>lm1 <span class="co"># Print output to console</span></span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = Score ~ STR, data = CASchools)
@@ -706,28 +829,30 @@ EC2203 | Royal Holloway | 2020/21
 ##      698.93        -2.28</code></pre>
 </section><section id="scatter-plot-with-sample-regression-function" class="slide level2">
 <h2>Scatter plot with sample regression function</h2>
-<p><span class="math display">\[\mathrm{E}(Score|STR) = 698.93 -2.28 STR\]</span> <img src="index_files/figure-revealjs/unnamed-chunk-9-1.png" width="70%" /></p>
+<p>OLS sample regression function <span class="math inline">\(=698.93 -2.28 STR\)</span> <img data-src="index_files/figure-revealjs/unnamed-chunk-13-1.png" /><!-- --></p>
 </section><section id="adding-sample-regression-function-to-plot-in-r" class="slide level2">
 <h2>Adding sample regression function to plot in R</h2>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Scatter plot of Score against STR</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="kw">plot</span>(CASchools<span class="op">$</span>STR,CASchools<span class="op">$</span>Score, </span>
-<span id="cb4-3"><a href="#cb4-3"></a>     <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="co"># Color of data points</span></span>
-<span id="cb4-4"><a href="#cb4-4"></a>     <span class="dt">xlab =</span> <span class="st">&quot;Student-teacher ratio&quot;</span>,  <span class="co"># Label on x-axis</span></span>
-<span id="cb4-5"><a href="#cb4-5"></a>     <span class="dt">ylab =</span> <span class="st">&quot;Test score&quot;</span>,   <span class="co"># Label on y-axis</span></span>
-<span id="cb4-6"><a href="#cb4-6"></a>     <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">10</span>, <span class="dv">30</span>),  <span class="co"># Range of x-axis (from 10 to 30)</span></span>
-<span id="cb4-7"><a href="#cb4-7"></a>     <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">600</span>, <span class="dv">720</span>)) <span class="co"># Range of y-axis (from 600 to 720)</span></span>
-<span id="cb4-8"><a href="#cb4-8"></a><span class="co"># Add sample regression function to the plot </span></span>
-<span id="cb4-9"><a href="#cb4-9"></a><span class="kw">abline</span>(lm1,</span>
-<span id="cb4-10"><a href="#cb4-10"></a>       <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>, <span class="co"># Make the line red</span></span>
-<span id="cb4-11"><a href="#cb4-11"></a>       <span class="dt">lwd =</span> <span class="dv">3</span>) <span class="co"># Set linewidth to 3</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># Scatter plot of Score against STR</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="kw">plot</span>(CASchools<span class="op">$</span>STR,CASchools<span class="op">$</span>Score, </span>
+<span id="cb6-3"><a href="#cb6-3"></a>     <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="co"># Color of data points</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a>     <span class="dt">xlab =</span> <span class="st">&quot;Student-teacher ratio&quot;</span>,  <span class="co"># Label on x-axis</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a>     <span class="dt">ylab =</span> <span class="st">&quot;Test score&quot;</span>,   <span class="co"># Label on y-axis</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a>     <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">10</span>, <span class="dv">30</span>),  <span class="co"># Range of x-axis (from 10 to 30)</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a>     <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">600</span>, <span class="dv">720</span>)) <span class="co"># Range of y-axis (from 600 to 720)</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="co"># Add line with intercept 695 and slope -2 to the plot </span></span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="kw">abline</span>(<span class="dv">695</span>,<span class="op">-</span><span class="dv">2</span>, </span>
+<span id="cb6-10"><a href="#cb6-10"></a>       <span class="dt">col =</span> <span class="st">&quot;gray&quot;</span>, <span class="co"># Make the line gray</span></span>
+<span id="cb6-11"><a href="#cb6-11"></a>       <span class="dt">lwd =</span> <span class="dv">3</span>) <span class="co"># Set linewidth to 3</span></span>
+<span id="cb6-12"><a href="#cb6-12"></a><span class="co"># Add sample regression function to the plot</span></span>
+<span id="cb6-13"><a href="#cb6-13"></a><span class="kw">abline</span>(lm1,</span>
+<span id="cb6-14"><a href="#cb6-14"></a>       <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>, <span class="co"># Make the line red</span></span>
+<span id="cb6-15"><a href="#cb6-15"></a>       <span class="dt">lwd =</span> <span class="dv">3</span>) <span class="co"># Set linewidth to 3</span></span></code></pre></div>
 </section></section>
 <section id="summary" class="title-slide slide level1"><h1>Summary</h1><ul>
-<li><p>The simple population regression model is</p>
-<p><span class="math display">\[Y = \beta_0 + \beta_1 X + u,\]</span></p></li>
-<li><p>We can estimate unknown <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> by OLS using a sample <span class="math inline">\((X_i,Y_i; i=1,...,n)\)</span>; estimators are <span class="math inline">\(\hat{\beta}_0\)</span> and <span class="math inline">\(\hat{\beta}_1\)</span></p>
-<p><span class="math display">\[Y_i = \hat{\beta}_0 + \hat{\beta}_1 X_i + \hat{u}_i,\]</span></p></li>
+<li><p>The simple regression model relates the dependent variable <span class="math inline">\(Score\)</span> to a regressor <span class="math inline">\(STR\)</span> and an error term <span class="math inline">\(u\)</span></p></li>
+<li><p>The error term <span class="math inline">\(u\)</span> contains all the determinants of <span class="math inline">\(Score\)</span> that are not <span class="math inline">\(STR\)</span></p></li>
 <li><p>The OLS estimators picks out the “best line” in a scatter by minimizing the sum of squared residuals, <span class="math inline">\(\sum_{i=1}^n \hat{u}_i^2\)</span>.</p></li>
-<li><p>The OLS estimator <span class="math inline">\(\hat{\beta}_1\)</span> is the ratio of the sample covariance b/w <span class="math inline">\(Y\)</span> and <span class="math inline">\(X\)</span> to the sample variance of <span class="math inline">\(X\)</span></p></li>
+<li><p>The OLS estimator <span class="math inline">\(\hat{\beta}_1\)</span> of the coefficient on <span class="math inline">\(STR\)</span> is the sample covariance between <span class="math inline">\(Score\)</span> and <span class="math inline">\(STR\)</span> divided by the sample variance of <span class="math inline">\(STR\)</span></p></li>
 </ul></section>
     </div>
   </div>
