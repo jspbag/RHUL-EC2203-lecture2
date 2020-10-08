@@ -714,22 +714,29 @@ EC2203 | Royal Holloway | 2020/21
 <p><span class="math display">\[Score_i = \beta_0 + \beta_1 STR_i + u_i\]</span></p>
 </div></li>
 </ul>
+</section><section id="getting-started" class="slide level2">
+<h2>Getting started</h2>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">library</span>(AER) <span class="co"># include Applied Econometrics with R package; contains many datasets</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="kw">data</span>(CASchools) <span class="co"># Load CASchools data</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="co"># Generate a couple of useful variables</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a>CASchools<span class="op">$</span>STR &lt;-<span class="st"> </span>CASchools<span class="op">$</span>students<span class="op">/</span>CASchools<span class="op">$</span>teachers  <span class="co"># Student-teacher ratio</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a>CASchools<span class="op">$</span>Score &lt;-<span class="st"> </span>(CASchools<span class="op">$</span>read <span class="op">+</span><span class="st"> </span>CASchools<span class="op">$</span>math)<span class="op">/</span><span class="dv">2</span>  <span class="co"># Student test score</span></span></code></pre></div>
 </section><section id="test-scores-and-student-teacher-ratio-data" class="slide level2">
 <h2>Test scores and student-teacher ratio data</h2>
-<p><img data-src="index_files/figure-revealjs/unnamed-chunk-6-1.png" /><!-- --></p>
+<p><img data-src="index_files/figure-revealjs/unnamed-chunk-7-1.png" /><!-- --></p>
 </section><section id="adding-a-line-to-a-plot-in-r" class="slide level2">
 <h2>Adding a line to a plot in R</h2>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># Scatter plot of Score against STR</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="kw">plot</span>(CASchools<span class="op">$</span>STR,CASchools<span class="op">$</span>Score, </span>
-<span id="cb3-3"><a href="#cb3-3"></a>     <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="co"># Color of data points</span></span>
-<span id="cb3-4"><a href="#cb3-4"></a>     <span class="dt">xlab =</span> <span class="st">&quot;Student-teacher ratio&quot;</span>,  <span class="co"># Label on x-axis</span></span>
-<span id="cb3-5"><a href="#cb3-5"></a>     <span class="dt">ylab =</span> <span class="st">&quot;Test score&quot;</span>,   <span class="co"># Label on y-axis</span></span>
-<span id="cb3-6"><a href="#cb3-6"></a>     <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">10</span>, <span class="dv">30</span>),  <span class="co"># Range of x-axis (from 10 to 30)</span></span>
-<span id="cb3-7"><a href="#cb3-7"></a>     <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">600</span>, <span class="dv">720</span>)) <span class="co"># Range of y-axis (from 600 to 720)</span></span>
-<span id="cb3-8"><a href="#cb3-8"></a><span class="co"># Add line with intercept 695 and slope -2 to the plot </span></span>
-<span id="cb3-9"><a href="#cb3-9"></a><span class="kw">abline</span>(<span class="dv">695</span>,<span class="op">-</span><span class="dv">2</span>, </span>
-<span id="cb3-10"><a href="#cb3-10"></a>       <span class="dt">col =</span> <span class="st">&quot;gray&quot;</span>, <span class="co"># Make the line gray</span></span>
-<span id="cb3-11"><a href="#cb3-11"></a>       <span class="dt">lwd =</span> <span class="dv">3</span>) <span class="co"># Set linewidth to 3</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Scatter plot of Score against STR</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="kw">plot</span>(CASchools<span class="op">$</span>STR,CASchools<span class="op">$</span>Score, </span>
+<span id="cb4-3"><a href="#cb4-3"></a>     <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="co"># Color of data points</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a>     <span class="dt">xlab =</span> <span class="st">&quot;Student-teacher ratio&quot;</span>,  <span class="co"># Label on x-axis</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a>     <span class="dt">ylab =</span> <span class="st">&quot;Test score&quot;</span>,   <span class="co"># Label on y-axis</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a>     <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">10</span>, <span class="dv">30</span>),  <span class="co"># Range of x-axis (from 10 to 30)</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a>     <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">600</span>, <span class="dv">720</span>)) <span class="co"># Range of y-axis (from 600 to 720)</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="co"># Add line with intercept 695 and slope -2 to the plot </span></span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="kw">abline</span>(<span class="dv">695</span>,<span class="op">-</span><span class="dv">2</span>, </span>
+<span id="cb4-10"><a href="#cb4-10"></a>       <span class="dt">col =</span> <span class="st">&quot;gray&quot;</span>, <span class="co"># Make the line gray</span></span>
+<span id="cb4-11"><a href="#cb4-11"></a>       <span class="dt">lwd =</span> <span class="dv">3</span>) <span class="co"># Set linewidth to 3</span></span></code></pre></div>
 </section><section id="sample-regression-function" class="slide level2">
 <h2>Sample regression function</h2>
 <ul>
@@ -742,10 +749,10 @@ EC2203 | Royal Holloway | 2020/21
 </ul>
 </section><section id="best-line-through-the-data" class="slide level2">
 <h2>“Best” line through the data?</h2>
-<p>Sample regression function <span class="math inline">\(= 713 - 3 STR\)</span> <img data-src="index_files/figure-revealjs/unnamed-chunk-8-1.png" /><!-- --></p>
+<p>Sample regression function <span class="math inline">\(= 713 - 3 STR\)</span> <img data-src="index_files/figure-revealjs/unnamed-chunk-9-1.png" /><!-- --></p>
 </section><section id="best-line-through-the-data-1" class="slide level2">
 <h2>“Best” line through the data?</h2>
-<p>Sample regression function <span class="math inline">\(= 595 + 3 STR\)</span> <img data-src="index_files/figure-revealjs/unnamed-chunk-9-1.png" /><!-- --></p>
+<p>Sample regression function <span class="math inline">\(= 595 + 3 STR\)</span> <img data-src="index_files/figure-revealjs/unnamed-chunk-10-1.png" /><!-- --></p>
 </section><section id="fitted-values" class="slide level2">
 <h2>Fitted values</h2>
 <div class="box">
@@ -756,7 +763,7 @@ EC2203 | Royal Holloway | 2020/21
 </ul>
 </section><section id="fitted-values-1" class="slide level2">
 <h2>Fitted values</h2>
-<p><span class="math display">\[\hat{Score}_i = 713 - 3 STR_i\]</span> <img data-src="index_files/figure-revealjs/unnamed-chunk-10-1.png" /><!-- --></p>
+<p><span class="math display">\[\hat{Score}_i = 713 - 3 STR_i\]</span> <img data-src="index_files/figure-revealjs/unnamed-chunk-11-1.png" /><!-- --></p>
 <!-- ## Predictions -->
 <!-- $$\mathrm{E}(Score|STR) = 713 - 3 STR$$ -->
 <!-- ```{r echo=FALSE, error=FALSE, warning=FALSE, out.width = "70%"} -->
@@ -796,7 +803,7 @@ EC2203 | Royal Holloway | 2020/21
 </ul>
 </section><section id="residuals-1" class="slide level2">
 <h2>Residuals</h2>
-<p><span class="math display">\[\hat{u}_i = Score_i - (713 - 3 STR_i)\]</span> <img data-src="index_files/figure-revealjs/unnamed-chunk-11-1.png" /><!-- --></p>
+<p><span class="math display">\[\hat{u}_i = Score_i - (713 - 3 STR_i)\]</span> <img data-src="index_files/figure-revealjs/unnamed-chunk-12-1.png" /><!-- --></p>
 </section><section id="the-ols-estimator" class="slide level2">
 <h2>The OLS estimator</h2>
 <ul>
@@ -816,10 +823,10 @@ EC2203 | Royal Holloway | 2020/21
 </section></section>
 <section><section id="implementing-the-ols-estimator-in-r" class="title-slide slide level1"><h1>Implementing the OLS estimator in R</h1></section><section id="ols-estimates" class="slide level2">
 <h2>OLS estimates</h2>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Estimate b0,b1 in Score = b0 + b1 STR + u by OLS; </span></span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="co"># then assign output to lm1</span></span>
-<span id="cb4-3"><a href="#cb4-3"></a>lm1 &lt;-<span class="st"> </span><span class="kw">lm</span>(Score <span class="op">~</span><span class="st"> </span>STR, <span class="dt">data =</span> CASchools) </span>
-<span id="cb4-4"><a href="#cb4-4"></a>lm1 <span class="co"># Print output to console</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># Estimate b0,b1 in Score = b0 + b1 STR + u by OLS; </span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="co"># then assign output to lm1</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a>lm1 &lt;-<span class="st"> </span><span class="kw">lm</span>(Score <span class="op">~</span><span class="st"> </span>STR, <span class="dt">data =</span> CASchools) </span>
+<span id="cb5-4"><a href="#cb5-4"></a>lm1 <span class="co"># Print output to console</span></span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = Score ~ STR, data = CASchools)
@@ -829,31 +836,34 @@ EC2203 | Royal Holloway | 2020/21
 ##      698.93        -2.28</code></pre>
 </section><section id="scatter-plot-with-sample-regression-function" class="slide level2">
 <h2>Scatter plot with sample regression function</h2>
-<p>OLS sample regression function <span class="math inline">\(=698.93 -2.28 STR\)</span> <img data-src="index_files/figure-revealjs/unnamed-chunk-13-1.png" /><!-- --></p>
+<p>OLS sample regression function <span class="math inline">\(=698.93 -2.28 STR\)</span> <img data-src="index_files/figure-revealjs/unnamed-chunk-14-1.png" /><!-- --></p>
 </section><section id="adding-sample-regression-function-to-plot-in-r" class="slide level2">
 <h2>Adding sample regression function to plot in R</h2>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># Scatter plot of Score against STR</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a><span class="kw">plot</span>(CASchools<span class="op">$</span>STR,CASchools<span class="op">$</span>Score, </span>
-<span id="cb6-3"><a href="#cb6-3"></a>     <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="co"># Color of data points</span></span>
-<span id="cb6-4"><a href="#cb6-4"></a>     <span class="dt">xlab =</span> <span class="st">&quot;Student-teacher ratio&quot;</span>,  <span class="co"># Label on x-axis</span></span>
-<span id="cb6-5"><a href="#cb6-5"></a>     <span class="dt">ylab =</span> <span class="st">&quot;Test score&quot;</span>,   <span class="co"># Label on y-axis</span></span>
-<span id="cb6-6"><a href="#cb6-6"></a>     <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">10</span>, <span class="dv">30</span>),  <span class="co"># Range of x-axis (from 10 to 30)</span></span>
-<span id="cb6-7"><a href="#cb6-7"></a>     <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">600</span>, <span class="dv">720</span>)) <span class="co"># Range of y-axis (from 600 to 720)</span></span>
-<span id="cb6-8"><a href="#cb6-8"></a><span class="co"># Add line with intercept 695 and slope -2 to the plot </span></span>
-<span id="cb6-9"><a href="#cb6-9"></a><span class="kw">abline</span>(<span class="dv">695</span>,<span class="op">-</span><span class="dv">2</span>, </span>
-<span id="cb6-10"><a href="#cb6-10"></a>       <span class="dt">col =</span> <span class="st">&quot;gray&quot;</span>, <span class="co"># Make the line gray</span></span>
-<span id="cb6-11"><a href="#cb6-11"></a>       <span class="dt">lwd =</span> <span class="dv">3</span>) <span class="co"># Set linewidth to 3</span></span>
-<span id="cb6-12"><a href="#cb6-12"></a><span class="co"># Add sample regression function to the plot</span></span>
-<span id="cb6-13"><a href="#cb6-13"></a><span class="kw">abline</span>(lm1,</span>
-<span id="cb6-14"><a href="#cb6-14"></a>       <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>, <span class="co"># Make the line red</span></span>
-<span id="cb6-15"><a href="#cb6-15"></a>       <span class="dt">lwd =</span> <span class="dv">3</span>) <span class="co"># Set linewidth to 3</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># Scatter plot of Score against STR</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="kw">plot</span>(CASchools<span class="op">$</span>STR,CASchools<span class="op">$</span>Score, </span>
+<span id="cb7-3"><a href="#cb7-3"></a>     <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="co"># Color of data points</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a>     <span class="dt">xlab =</span> <span class="st">&quot;Student-teacher ratio&quot;</span>,  <span class="co"># Label on x-axis</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a>     <span class="dt">ylab =</span> <span class="st">&quot;Test score&quot;</span>,   <span class="co"># Label on y-axis</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a>     <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">10</span>, <span class="dv">30</span>),  <span class="co"># Range of x-axis (from 10 to 30)</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a>     <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">600</span>, <span class="dv">720</span>)) <span class="co"># Range of y-axis (from 600 to 720)</span></span>
+<span id="cb7-8"><a href="#cb7-8"></a><span class="co"># Add line with intercept 695 and slope -2 to the plot </span></span>
+<span id="cb7-9"><a href="#cb7-9"></a><span class="kw">abline</span>(<span class="dv">695</span>,<span class="op">-</span><span class="dv">2</span>, </span>
+<span id="cb7-10"><a href="#cb7-10"></a>       <span class="dt">col =</span> <span class="st">&quot;gray&quot;</span>, <span class="co"># Make the line gray</span></span>
+<span id="cb7-11"><a href="#cb7-11"></a>       <span class="dt">lwd =</span> <span class="dv">3</span>) <span class="co"># Set linewidth to 3</span></span>
+<span id="cb7-12"><a href="#cb7-12"></a><span class="co"># Add sample regression function to the plot</span></span>
+<span id="cb7-13"><a href="#cb7-13"></a><span class="kw">abline</span>(lm1,</span>
+<span id="cb7-14"><a href="#cb7-14"></a>       <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>, <span class="co"># Make the line red</span></span>
+<span id="cb7-15"><a href="#cb7-15"></a>       <span class="dt">lwd =</span> <span class="dv">3</span>) <span class="co"># Set linewidth to 3</span></span></code></pre></div>
 </section></section>
-<section id="summary" class="title-slide slide level1"><h1>Summary</h1><ul>
+<section><section id="summary" class="title-slide slide level1"><h1>Summary</h1></section><section id="summary-1" class="slide level2">
+<h2>Summary</h2>
+<ul>
 <li><p>The simple regression model relates the dependent variable <span class="math inline">\(Score\)</span> to a regressor <span class="math inline">\(STR\)</span> and an error term <span class="math inline">\(u\)</span></p></li>
 <li><p>The error term <span class="math inline">\(u\)</span> contains all the determinants of <span class="math inline">\(Score\)</span> that are not <span class="math inline">\(STR\)</span></p></li>
 <li><p>The OLS estimators picks out the “best line” in a scatter by minimizing the sum of squared residuals, <span class="math inline">\(\sum_{i=1}^n \hat{u}_i^2\)</span>.</p></li>
 <li><p>The OLS estimator <span class="math inline">\(\hat{\beta}_1\)</span> of the coefficient on <span class="math inline">\(STR\)</span> is the sample covariance between <span class="math inline">\(Score\)</span> and <span class="math inline">\(STR\)</span> divided by the sample variance of <span class="math inline">\(STR\)</span></p></li>
-</ul></section>
+</ul>
+</section></section>
     </div>
   </div>
 
